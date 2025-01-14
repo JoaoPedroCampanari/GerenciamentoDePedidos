@@ -38,9 +38,10 @@ public class ClienteController {
     }
 
     @PostMapping
-    ResponseEntity<Cliente> save(@RequestBody ClienteDto clienteDto){
+    ResponseEntity<String> save(@RequestBody ClienteDto clienteDto){
         logger.info("Cliente salvado: {}", clienteDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(clienteServices.save(clienteDto));
+        clienteServices.enfileirarCliente(clienteDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Cadastro iniciado, um email com mais detalhes sera enviado");
     }
 
     @PutMapping("/{id}")
