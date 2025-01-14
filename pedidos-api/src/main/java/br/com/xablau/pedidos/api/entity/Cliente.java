@@ -23,7 +23,7 @@ public class Cliente {
     private String nome;
     private String email;
     private Integer idade;
-    private String endereço;
+    private String endereco;
     private Double saldoAplicativo;
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
     private List<Pedido> pedidoList = new ArrayList<>();
