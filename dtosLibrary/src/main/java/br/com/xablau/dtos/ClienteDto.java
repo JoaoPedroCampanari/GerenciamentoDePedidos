@@ -1,4 +1,4 @@
-package br.com.xablau.dtos.dtos;
+package br.com.xablau.dtos;
 
 import java.util.Objects;
 

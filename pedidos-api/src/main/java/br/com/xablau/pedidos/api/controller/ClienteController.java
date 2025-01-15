@@ -1,6 +1,7 @@
 package br.com.xablau.pedidos.api.controller;
 
-import br.com.xablau.dtos.dtos.ClienteDto;
+
+import br.com.xablau.dtos.ClienteDto;
 import br.com.xablau.pedidos.api.entity.Cliente;
 import br.com.xablau.pedidos.api.entity.Pedido;
 import br.com.xablau.pedidos.api.services.impl.ClienteServices;
