@@ -6,6 +6,8 @@
       <list>
         <option value="$PROJECT_DIR$/pedidos-api/pom.xml" />
         <option value="$PROJECT_DIR$/email-api/pom.xml" />
+        <option value="$PROJECT_DIR$/pedidosDtosLibrary/pom.xml" />
+        <option value="$PROJECT_DIR$/dtosLibrary/pom.xml" />
       </list>
     </option>
   </component>

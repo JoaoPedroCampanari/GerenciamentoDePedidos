@@ -1,0 +1,22 @@
+package br.com.xablau.email_api.listener;
+
+import br.com.xablau.dtos.ClienteDto;
+import br.com.xablau.email_api.serviceEmail.ClienteService;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.stereotype.Component;
+
+@Component
+public class ClienteListener {
+
+    private final ClienteService clienteService;
+
+    public ClienteListener(ClienteService clienteService) {
+        this.clienteService = clienteService;
+    }
+
+    @RabbitListener(queues = "${rabbitmq.queue.name}")
+    public void enviarNotificacaoClienteCriado(ClienteDto clienteDto){
+        clienteService.enviarEmailClienteCriado(clienteDto);
+    }
+
+}
