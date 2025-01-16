@@ -3,6 +3,7 @@ package br.com.xablau.pedidos.api.services;
 import br.com.xablau.dtos.ClienteDto;
 import br.com.xablau.pedidos.api.entity.Cliente;
 import br.com.xablau.pedidos.api.entity.Pedido;
+import br.com.xablau.pedidos.api.exception.ClienteException.ClienteEmailAlreadyExist;
 import br.com.xablau.pedidos.api.exception.ClienteException.ClienteNotFoundException;
 import br.com.xablau.pedidos.api.repository.ClienteRepository;
 import br.com.xablau.pedidos.api.services.impl.ClienteServices;
@@ -59,6 +60,10 @@ public class ClienteServicesImpl implements ClienteServices {
 
     @Override
     public Cliente save(ClienteDto clienteDto) {
+        if (clienteRepository.existsByEmail(clienteDto.getEmail())){
+            throw new ClienteEmailAlreadyExist("Email já possui cadastro", HttpStatus.CONFLICT, "CONFLICT");
+        }
+
         Cliente cliente = new Cliente();
         BeanUtils.copyProperties(clienteDto, cliente);
         return clienteRepository.save(cliente);
