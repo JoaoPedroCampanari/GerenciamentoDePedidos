@@ -1,10 +1,7 @@
 package br.com.xablau.pedidos.api.config;
 
 
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.DirectExchange;
-import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -16,6 +13,9 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Configuration
 public class RabbitMqConfig {
 
@@ -25,6 +25,17 @@ public class RabbitMqConfig {
     @Value("${rabbitmq.queue.name}")
     private String queueProcessamentoServicesName;
 
+    @Value("${rabbitmq.exchange.dlx.name}")
+    private String exchangeDlxName;
+
+    @Value("${rabbitmq.queue.dlq.name}")
+    private String queueDlqName;
+
+    @Bean
+    public FanoutExchange pedidosDlxExchange() {
+        return new FanoutExchange(exchangeDlxName);
+    }
+
     @Bean
     public DirectExchange pedidosExchangeDirect(){
         return new DirectExchange(exchangeDirectName);
@@ -32,7 +43,18 @@ public class RabbitMqConfig {
 
     @Bean
     public Queue queueProcessamentoServices(){
-        return new Queue(queueProcessamentoServicesName);
+        Map<String, Object> argumentos = new HashMap<>();
+        argumentos.put("x-dead-letter-exchange", exchangeDlxName);
+        return new Queue(queueProcessamentoServicesName, true, false, false, argumentos);
+    }
+
+    @Bean
+    public Queue notificacaoDlqQueue() {
+        return new Queue(queueDlqName);
+    }
+    @Bean
+    public Binding bindingDlxDlq(){
+        return BindingBuilder.bind(notificacaoDlqQueue()).to(pedidosDlxExchange());
     }
 
     @Bean
