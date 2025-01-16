@@ -26,6 +26,9 @@ public class RabbitMqConfig {
     @Value("${rabbitmq.queue.name}")
     private String queueNameClienteCriado;
 
+    @Value("${rabbitmq.queueEmail.name}")
+    private String queueNameClienteErroEmail;
+
     @Bean
     public DirectExchange directExchange(){
         return new DirectExchange(exchangeName);
@@ -37,13 +40,23 @@ public class RabbitMqConfig {
     }
 
     @Bean
+    public Queue clienteEmailErro(){
+        return new Queue(queueNameClienteErroEmail);
+    }
+
+    @Bean
     public MessageConverter messageConverter() {
         return new Jackson2JsonMessageConverter();
     }
 
     @Bean
     public Binding binding(){
-        return BindingBuilder.bind(clienteCriadoqueue()).to(directExchange()).with("servicesBD");
+        return BindingBuilder.bind(clienteCriadoqueue()).to(directExchange()).with("servicesBDsucesso");
+    }
+
+    @Bean
+    public Binding bindingEmailError(){
+        return BindingBuilder.bind(clienteEmailErro()).to(directExchange()).with("servicesBDEmailErro");
     }
 
     @Bean

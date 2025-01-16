@@ -19,4 +19,9 @@ public class ClienteListener {
         clienteService.enviarEmailClienteCriado(clienteDto);
     }
 
+    @RabbitListener(queues = "${rabbitmq.queueEmail.name}")
+    public void enviarNotificacaoClienteEmailError(ClienteDto clienteDto){
+        clienteService.enviarEmailClienteEmailError(clienteDto);
+    }
+
 }

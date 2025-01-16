@@ -61,11 +61,13 @@ public class ClienteServicesImpl implements ClienteServices {
     @Override
     public Cliente save(ClienteDto clienteDto) {
         if (clienteRepository.existsByEmail(clienteDto.getEmail())){
+            rabbitTemplate.convertAndSend(exchangeName, "servicesBDEmailErro", clienteDto);
             throw new ClienteEmailAlreadyExist("Email já possui cadastro", HttpStatus.CONFLICT, "CONFLICT");
         }
 
         Cliente cliente = new Cliente();
         BeanUtils.copyProperties(clienteDto, cliente);
+        rabbitTemplate.convertAndSend(exchangeName, "servicesBDsucesso", clienteDto);
         return clienteRepository.save(cliente);
     }
 

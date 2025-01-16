@@ -24,7 +24,25 @@ public class ClienteService {
         javaMailSender.send(simpleMailMessage);
     }
 
-    public String gerarMensagem(ClienteDto clienteDto){
-        return String.format("Olá %s, seu cadastrado foi efetuado com sucesso no email %s, seu saldo no aplicativo atualmente é: %.2f", clienteDto.getNome(), clienteDto.getEmail(), clienteDto.getSaldoAplicativo());
+    public void enviarEmailClienteEmailError(ClienteDto clienteDto) {
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        simpleMailMessage.setSubject("Email já possui cadastro");
+        simpleMailMessage.setTo(clienteDto.getEmail());
+        simpleMailMessage.setFrom("pedidos-api@company.com");
+        simpleMailMessage.setText(this.gerarMensagemEmailError(clienteDto));
+
+        javaMailSender.send(simpleMailMessage);
     }
+
+    public String gerarMensagem(ClienteDto clienteDto){
+        return String.format("Olá %s, seu cadastrado foi efetuado com sucesso no email %s," +
+                " seu saldo no aplicativo atualmente é: %.2f",
+                clienteDto.getNome(), clienteDto.getEmail(), clienteDto.getSaldoAplicativo());
+    }
+
+    public String gerarMensagemEmailError(ClienteDto clienteDto){
+        return String.format("Olá %s, seu email %s já possui cadastro em nosso aplicativo", clienteDto.getNome(), clienteDto.getEmail());
+    }
+
+
 }
