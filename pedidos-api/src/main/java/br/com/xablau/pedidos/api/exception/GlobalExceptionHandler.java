@@ -14,15 +14,15 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(ClienteNotFoundException.class)
-    private ResponseEntity<Map<String,Object>> exceptionHandler(ClienteNotFoundException ex){
-        Map<String, Object> body = new HashMap<>();
+    @ExceptionHandler(AbstractExceptionGlobal.class)
+    private ResponseEntity<Map<String,Object>> exceptionHandler(AbstractExceptionGlobal ex){
+        Map<String, Object> mensagem = new HashMap<>();
 
-        body.put("status", "404");
-        body.put("error", "NOT FOUND");
-        body.put("message", ex.getMessage());
-        body.put("timestamp", LocalDateTime.now());
+        mensagem.put("status", ex.getStatus().value());
+        mensagem.put("error", ex.getCauseException());
+        mensagem.put("message", ex.getMessage());
+        mensagem.put("timestamp", LocalDateTime.now());
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
+        return ResponseEntity.status(ex.getStatus()).body(mensagem);
     }
 }

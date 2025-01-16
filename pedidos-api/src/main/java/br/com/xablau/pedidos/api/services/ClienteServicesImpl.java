@@ -3,11 +3,13 @@ package br.com.xablau.pedidos.api.services;
 import br.com.xablau.dtos.ClienteDto;
 import br.com.xablau.pedidos.api.entity.Cliente;
 import br.com.xablau.pedidos.api.entity.Pedido;
+import br.com.xablau.pedidos.api.exception.ClienteException.ClienteNotFoundException;
 import br.com.xablau.pedidos.api.repository.ClienteRepository;
 import br.com.xablau.pedidos.api.services.impl.ClienteServices;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,7 +31,8 @@ public class ClienteServicesImpl implements ClienteServices {
 
     @Override
     public Cliente findById(UUID id) {
-        return clienteRepository.findById(id).orElseThrow(() -> new RuntimeException("Cliente inexistente"));
+        return clienteRepository.findById(id)
+                .orElseThrow(() -> new ClienteNotFoundException("Cliente inexistente", HttpStatus.NOT_FOUND, "NOT FOUND"));
     }
 
     @Override
@@ -39,7 +42,8 @@ public class ClienteServicesImpl implements ClienteServices {
 
     @Override
     public Cliente update(UUID id, ClienteDto clienteDto) {
-        Cliente clienteUpdate = clienteRepository.findById(id).orElseThrow(() -> new RuntimeException("Cliente inexistente"));
+        Cliente clienteUpdate = clienteRepository.findById(id)
+                .orElseThrow(() -> new ClienteNotFoundException("Cliente inexistente", HttpStatus.NOT_FOUND, "NOT FOUND"));
         BeanUtils.copyProperties(clienteDto, clienteUpdate);
         return clienteRepository.save(clienteUpdate);
     }
@@ -47,7 +51,7 @@ public class ClienteServicesImpl implements ClienteServices {
     @Override
     public String deleteById(UUID id) {
         if (!clienteRepository.existsById(id)){
-            throw new RuntimeException("Cliente inexistente");
+            throw new ClienteNotFoundException("Cliente inexistente", HttpStatus.NOT_FOUND, "NOT FOUND");
         }
         clienteRepository.deleteById(id);
         return "Cliente deletado";
@@ -62,7 +66,8 @@ public class ClienteServicesImpl implements ClienteServices {
 
     @Override
     public List<Pedido> pedidosClienteById(UUID id) {
-        Cliente cliente = clienteRepository.findById(id).orElseThrow(() -> new RuntimeException("Cliente inexistente"));
+        Cliente cliente = clienteRepository.findById(id)
+                .orElseThrow(() -> new ClienteNotFoundException("Cliente inexistente", HttpStatus.NOT_FOUND, "NOT FOUND"));
         return cliente.getPedidoList();
     }
 
