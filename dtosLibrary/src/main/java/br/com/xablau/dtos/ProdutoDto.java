@@ -7,6 +7,14 @@ public class ProdutoDto {
     private String name;
     private Double valor;
 
+    public ProdutoDto() {
+    }
+
+    public ProdutoDto(String name, Double valor) {
+        this.name = name;
+        this.valor = valor;
+    }
+
     public String getName() {
         return name;
     }

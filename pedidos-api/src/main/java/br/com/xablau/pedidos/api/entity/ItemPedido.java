@@ -18,6 +18,8 @@ public class ItemPedido {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private Integer quantidade;
+    private Double valorTotal;
+
     @OneToOne
     @JoinColumn(name = "produto_id")
     private Produto produto;
@@ -26,7 +28,11 @@ public class ItemPedido {
     @JoinColumn(name = "pedido_id")
     private Pedido pedido;
 
-    public Double getValorTotal(){
-        return produto.getValor() * quantidade;
+    public Double calculoValorTotal(){
+        return quantidade * produto.getValor();
+    }
+
+    public void associarPedido(Pedido pedidoCriado){
+        this.pedido = pedidoCriado;
     }
 }

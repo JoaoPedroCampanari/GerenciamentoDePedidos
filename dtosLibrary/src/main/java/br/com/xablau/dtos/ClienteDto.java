@@ -61,26 +61,4 @@ public class ClienteDto {
         this.saldoAplicativo = saldoAplicativo;
     }
 
-    @Override
-    public String toString() {
-        return "ClienteDto{" +
-                "nome='" + nome + '\'' +
-                ", email='" + email + '\'' +
-                ", idade=" + idade +
-                ", endereco='" + endereco + '\'' +
-                ", saldoAplicativo=" + saldoAplicativo +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        ClienteDto that = (ClienteDto) o;
-        return Objects.equals(nome, that.nome) && Objects.equals(email, that.email) && Objects.equals(idade, that.idade) && Objects.equals(endereco, that.endereco) && Objects.equals(saldoAplicativo, that.saldoAplicativo);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(nome, email, idade, endereco, saldoAplicativo);
-    }
 }
