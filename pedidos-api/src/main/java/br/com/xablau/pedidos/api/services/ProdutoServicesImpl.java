@@ -51,7 +51,7 @@ public class ProdutoServicesImpl implements ProdutoServices{
 
     @Override
     public Produto save(ProdutoDto produtoDto) {
-        if (produtoRepository.existsByNome(produtoDto.getName())){
+        if (produtoRepository.existsByNome(produtoDto.getNome())){
             throw new ProdutoNotFoundException("Produto Já encontrado na base de dados!", HttpStatus.CONFLICT, "CONFLICT");
         }
 

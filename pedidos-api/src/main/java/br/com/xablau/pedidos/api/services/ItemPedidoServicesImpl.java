@@ -23,7 +23,7 @@ public class ItemPedidoServicesImpl implements ItemPedidoServices {
     @Override
     public ItemPedido findById(UUID id) {
         return itemPedidoRepository.findById(id)
-                .orElseThrow(() -> new ItemPedidoNotFoundException("ItemPedido não encontrado!", HttpStatus.NOT_FOUND, "NOT FOUND"));
+                .orElseThrow(() -> new ItemPedidoNotFoundException("ItemPedido não encontrado!", HttpStatus.NOT_FOUND,  "NOT FOUND"));
     }
 
     @Override
