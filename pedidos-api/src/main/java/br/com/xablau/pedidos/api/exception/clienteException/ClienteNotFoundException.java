@@ -1,4 +1,4 @@
-package br.com.xablau.pedidos.api.exception.ClienteException;
+package br.com.xablau.pedidos.api.exception.clienteException;
 
 
 import br.com.xablau.pedidos.api.exception.AbstractExceptionGlobal;

@@ -1,7 +1,7 @@
 package br.com.xablau.pedidos.api.services.impl;
 
 import br.com.xablau.pedidos.api.entity.Produto;
-import br.com.xablau.pedidos.api.entity.dtos.ProdutoDto;
+import br.com.xablau.dtos.ProdutoDto;
 
 import java.util.List;
 import java.util.UUID;
