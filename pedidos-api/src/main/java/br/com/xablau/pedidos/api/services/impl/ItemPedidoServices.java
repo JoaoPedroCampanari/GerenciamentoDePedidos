@@ -18,7 +18,7 @@ public interface ItemPedidoServices {
 
     String deleteById(UUID id);
 
-    ItemPedido save(ItemPedidoDto itemPedidoDto);
+    ItemPedido save(ItemPedido itemPedido);
 
     Pedido pedidoDoItemById(UUID id);
 }

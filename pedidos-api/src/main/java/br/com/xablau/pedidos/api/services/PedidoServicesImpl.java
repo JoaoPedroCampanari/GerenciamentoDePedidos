@@ -4,9 +4,13 @@ import br.com.xablau.dtos.ItemPedidoDto;
 import br.com.xablau.dtos.PedidoDto;
 import br.com.xablau.pedidos.api.entity.ItemPedido;
 import br.com.xablau.pedidos.api.entity.Pedido;
+import br.com.xablau.pedidos.api.exception.clienteException.ClienteNotFoundException;
 import br.com.xablau.pedidos.api.exception.pedidoException.PedidoNotFoundException;
+import br.com.xablau.pedidos.api.exception.produtoException.ProdutoNotFoundException;
+import br.com.xablau.pedidos.api.repository.ClienteRepository;
 import br.com.xablau.pedidos.api.repository.ItemPedidoRepository;
 import br.com.xablau.pedidos.api.repository.PedidoRepository;
+import br.com.xablau.pedidos.api.repository.ProdutoRepository;
 import br.com.xablau.pedidos.api.services.impl.PedidoServices;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
@@ -22,12 +26,15 @@ public class PedidoServicesImpl implements PedidoServices {
 
     private final PedidoRepository pedidoRepository;
     private final ItemPedidoRepository itemPedidoRepository;
+    private final ClienteRepository clienteRepository;
+    private final ProdutoRepository produtoRepository;
 
-    public PedidoServicesImpl(PedidoRepository pedidoRepository, ItemPedidoRepository itemPedidoRepository) {
+    public PedidoServicesImpl(PedidoRepository pedidoRepository, ItemPedidoRepository itemPedidoRepository, ClienteRepository clienteRepository, ProdutoRepository produtoRepository) {
         this.pedidoRepository = pedidoRepository;
         this.itemPedidoRepository = itemPedidoRepository;
+        this.clienteRepository = clienteRepository;
+        this.produtoRepository = produtoRepository;
     }
-
 
     @Override
     public Pedido findById(UUID id) {
@@ -45,7 +52,7 @@ public class PedidoServicesImpl implements PedidoServices {
         Pedido pedido = pedidoRepository.findById(id)
                 .orElseThrow(() -> new PedidoNotFoundException("Pedido não existe!", HttpStatus.NOT_FOUND, "NOT FOUND"));
         BeanUtils.copyProperties(pedidoDto, pedido);
-        return pedido;
+        return pedidoRepository.save(pedido);
     }
 
     @Override
@@ -53,6 +60,8 @@ public class PedidoServicesImpl implements PedidoServices {
         if (!pedidoRepository.existsById(id)){
             throw new PedidoNotFoundException("Pedido não existe!", HttpStatus.NOT_FOUND, "NOT FOUND");
         }
+
+        pedidoRepository.deleteById(id);
         return "Pedido deletado com sucesso!";
     }
 
@@ -62,7 +71,13 @@ public class PedidoServicesImpl implements PedidoServices {
 
         List<ItemPedido> itemPedidos = pedidoDto.getItemPedidoDtos().stream().map(this::converterDtoParaItemPedido).toList();
 
+        for (ItemPedido itens: itemPedidos){
+            itens.setPedido(pedido);
+            itens.setValorTotal(itens.calculoValorTotal());
+        }
+
         pedido.setItemPedidoList(itemPedidos);
+        pedido.setValorTotal(pedido.calcularValorTotal());
 
         pedidoRepository.save(pedido);
         itemPedidoRepository.saveAll(itemPedidos);
@@ -83,7 +98,7 @@ public class PedidoServicesImpl implements PedidoServices {
     public ItemPedido converterDtoParaItemPedido(ItemPedidoDto itemPedidoDto) {
         ItemPedido itemPedido = new ItemPedido();
         BeanUtils.copyProperties(itemPedidoDto, itemPedido);
-
+        itemPedido.setProduto(produtoRepository.findById(itemPedidoDto.getProductId()).orElseThrow(() -> new ProdutoNotFoundException("Produto não encontrado!", HttpStatus.NOT_FOUND, "NOT FOUND")));
         return itemPedido;
     }
 
@@ -91,6 +106,8 @@ public class PedidoServicesImpl implements PedidoServices {
     public Pedido converDtoParaPedido(PedidoDto pedidoDto) {
         Pedido pedido = new Pedido();
         BeanUtils.copyProperties(pedidoDto, pedido);
+        pedido.setCliente(clienteRepository.findById(pedidoDto.getClientId())
+                .orElseThrow(() -> new ClienteNotFoundException("Cliente inexistente", HttpStatus.NOT_FOUND, "NOT FOUND")));
         return pedido;
     }
 }

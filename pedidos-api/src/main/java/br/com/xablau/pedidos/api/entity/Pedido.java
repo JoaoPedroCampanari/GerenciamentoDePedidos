@@ -26,4 +26,7 @@ public class Pedido {
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
     private List<ItemPedido> itemPedidoList = new ArrayList<>();
 
+    public Double calcularValorTotal(){
+        return itemPedidoList.stream().mapToDouble(ItemPedido::getValorTotal).sum();
+    }
 }

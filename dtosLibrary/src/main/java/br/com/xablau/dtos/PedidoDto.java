@@ -8,12 +8,13 @@ import java.util.UUID;
 public class PedidoDto {
 
     private UUID  clientId;
-    private Double valorTotal;
     private List<ItemPedidoDto> itemPedidoDtos = new ArrayList<>();
 
-    public PedidoDto(UUID clientId, Double valorTotal, List<ItemPedidoDto> itemPedidoDtos) {
+    public PedidoDto() {
+    }
+
+    public PedidoDto(UUID clientId, List<ItemPedidoDto> itemPedidoDtos) {
         this.clientId = clientId;
-        this.valorTotal = valorTotal;
         this.itemPedidoDtos = itemPedidoDtos;
     }
 
@@ -23,14 +24,6 @@ public class PedidoDto {
 
     public void setClientId(UUID clientId) {
         this.clientId = clientId;
-    }
-
-    public Double getValorTotal() {
-        return valorTotal;
-    }
-
-    public void setValorTotal(Double valorTotal) {
-        this.valorTotal = valorTotal;
     }
 
     public List<ItemPedidoDto> getItemPedidoDtos() {
@@ -45,19 +38,18 @@ public class PedidoDto {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         PedidoDto pedidoDto = (PedidoDto) o;
-        return Objects.equals(clientId, pedidoDto.clientId) && Objects.equals(valorTotal, pedidoDto.valorTotal) && Objects.equals(itemPedidoDtos, pedidoDto.itemPedidoDtos);
+        return Objects.equals(clientId, pedidoDto.clientId) && Objects.equals(itemPedidoDtos, pedidoDto.itemPedidoDtos);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(clientId, valorTotal, itemPedidoDtos);
+        return Objects.hash(clientId, itemPedidoDtos);
     }
 
     @Override
     public String toString() {
         return "PedidoDto{" +
                 "clientId=" + clientId +
-                ", valorTotal=" + valorTotal +
                 ", itemPedidoDtos=" + itemPedidoDtos +
                 '}';
     }

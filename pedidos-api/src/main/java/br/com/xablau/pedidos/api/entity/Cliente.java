@@ -1,5 +1,6 @@
 package br.com.xablau.pedidos.api.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,6 +26,7 @@ public class Cliente{
     private Integer idade;
     private String endereco;
     private Double saldoAplicativo;
+    @JsonIgnore
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
     private List<Pedido> pedidoList = new ArrayList<>();
 }

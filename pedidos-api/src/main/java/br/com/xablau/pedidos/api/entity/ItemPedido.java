@@ -1,5 +1,6 @@
 package br.com.xablau.pedidos.api.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,19 +21,16 @@ public class ItemPedido {
     private Integer quantidade;
     private Double valorTotal;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "produto_id")
     private Produto produto;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "pedido_id")
     private Pedido pedido;
 
     public Double calculoValorTotal(){
         return quantidade * produto.getValor();
-    }
-
-    public void associarPedido(Pedido pedidoCriado){
-        this.pedido = pedidoCriado;
     }
 }
