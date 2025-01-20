@@ -1,7 +1,9 @@
 package br.com.xablau.pedidos.api.services;
 
+import br.com.xablau.dtos.ClienteDto;
 import br.com.xablau.dtos.ItemPedidoDto;
 import br.com.xablau.dtos.PedidoDto;
+import br.com.xablau.pedidos.api.entity.Cliente;
 import br.com.xablau.pedidos.api.entity.ItemPedido;
 import br.com.xablau.pedidos.api.entity.Pedido;
 import br.com.xablau.pedidos.api.exception.clienteException.ClienteNotFoundException;
@@ -12,7 +14,9 @@ import br.com.xablau.pedidos.api.repository.ItemPedidoRepository;
 import br.com.xablau.pedidos.api.repository.PedidoRepository;
 import br.com.xablau.pedidos.api.repository.ProdutoRepository;
 import br.com.xablau.pedidos.api.services.impl.PedidoServices;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -23,13 +27,17 @@ import java.util.UUID;
 @Service
 public class PedidoServicesImpl implements PedidoServices {
 
+    @Value("${rabbitmq.direct.exchange.name}")
+    private String exchangeName;
 
+    private final RabbitTemplate rabbitTemplate;
     private final PedidoRepository pedidoRepository;
     private final ItemPedidoRepository itemPedidoRepository;
     private final ClienteRepository clienteRepository;
     private final ProdutoRepository produtoRepository;
 
-    public PedidoServicesImpl(PedidoRepository pedidoRepository, ItemPedidoRepository itemPedidoRepository, ClienteRepository clienteRepository, ProdutoRepository produtoRepository) {
+    public PedidoServicesImpl(RabbitTemplate rabbitTemplate, PedidoRepository pedidoRepository, ItemPedidoRepository itemPedidoRepository, ClienteRepository clienteRepository, ProdutoRepository produtoRepository) {
+        this.rabbitTemplate = rabbitTemplate;
         this.pedidoRepository = pedidoRepository;
         this.itemPedidoRepository = itemPedidoRepository;
         this.clienteRepository = clienteRepository;
@@ -81,6 +89,7 @@ public class PedidoServicesImpl implements PedidoServices {
 
         pedidoRepository.save(pedido);
         itemPedidoRepository.saveAll(itemPedidos);
+        rabbitTemplate.convertAndSend(exchangeName, "pedidoCriadoSucesso", transformarClienteEmDto(pedido.getCliente()));
 
         return pedido;
     }
@@ -109,5 +118,11 @@ public class PedidoServicesImpl implements PedidoServices {
         pedido.setCliente(clienteRepository.findById(pedidoDto.getClientId())
                 .orElseThrow(() -> new ClienteNotFoundException("Cliente inexistente", HttpStatus.NOT_FOUND, "NOT FOUND")));
         return pedido;
+    }
+
+    public ClienteDto transformarClienteEmDto(Cliente cliente){
+        ClienteDto clienteDto = new ClienteDto();
+        BeanUtils.copyProperties(cliente, clienteDto);
+        return clienteDto;
     }
 }

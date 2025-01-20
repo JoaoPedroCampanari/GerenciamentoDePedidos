@@ -34,6 +34,16 @@ public class ClienteService {
         javaMailSender.send(simpleMailMessage);
     }
 
+    public void enviarEmailClientePedidoCriado(ClienteDto clienteDto) {
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        simpleMailMessage.setSubject("Pedido criado com sucesso");
+        simpleMailMessage.setTo(clienteDto.getEmail());
+        simpleMailMessage.setFrom("pedido-api@company.com");
+        simpleMailMessage.setText(this.gerarMensagemPedidoCriado(clienteDto));
+
+        javaMailSender.send(simpleMailMessage);
+    }
+
     public String gerarMensagem(ClienteDto clienteDto){
         return String.format("Olá %s, seu cadastrado foi efetuado com sucesso no email %s," +
                 " seu saldo no aplicativo atualmente é: %.2f",
@@ -45,4 +55,8 @@ public class ClienteService {
     }
 
 
+    public String gerarMensagemPedidoCriado(ClienteDto clienteDto){
+        return String.format("Olá %s, seu pedido foi criado com sucesso e se encontra em preparo!," +
+                " seu saldo atual é %.2f:", clienteDto.getNome(), clienteDto.getSaldoAplicativo());
+    }
 }

@@ -29,6 +29,9 @@ public class RabbitMqConfig {
     @Value("${rabbitmq.queueEmail.name}")
     private String queueNameClienteErroEmail;
 
+    @Value("${rabbitmq.queuePedidoCriado.name}")
+    private String queuePedidoCriado;
+
     @Bean
     public DirectExchange directExchange(){
         return new DirectExchange(exchangeName);
@@ -45,6 +48,11 @@ public class RabbitMqConfig {
     }
 
     @Bean
+    public Queue clientePedidoCriado(){
+        return new Queue(queuePedidoCriado);
+    }
+
+    @Bean
     public MessageConverter messageConverter() {
         return new Jackson2JsonMessageConverter();
     }
@@ -57,6 +65,11 @@ public class RabbitMqConfig {
     @Bean
     public Binding bindingEmailError(){
         return BindingBuilder.bind(clienteEmailErro()).to(directExchange()).with("servicesBDEmailErro");
+    }
+
+    @Bean
+    public Binding bindingPedidoCriado(){
+        return BindingBuilder.bind(clientePedidoCriado()).to(directExchange()).with("pedidoCriadoSucesso");
     }
 
     @Bean
