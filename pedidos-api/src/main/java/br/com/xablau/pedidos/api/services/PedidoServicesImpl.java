@@ -6,6 +6,7 @@ import br.com.xablau.dtos.PedidoDto;
 import br.com.xablau.pedidos.api.entity.Cliente;
 import br.com.xablau.pedidos.api.entity.ItemPedido;
 import br.com.xablau.pedidos.api.entity.Pedido;
+import br.com.xablau.pedidos.api.exception.clienteException.ClienteInsufficientBalanceException;
 import br.com.xablau.pedidos.api.exception.clienteException.ClienteNotFoundException;
 import br.com.xablau.pedidos.api.exception.pedidoException.PedidoNotFoundException;
 import br.com.xablau.pedidos.api.exception.produtoException.ProdutoNotFoundException;
@@ -85,7 +86,14 @@ public class PedidoServicesImpl implements PedidoServices {
         }
 
         pedido.setItemPedidoList(itemPedidos);
+        if (pedido.getCliente().getSaldoAplicativo() < pedido.calcularValorTotal()){
+            rabbitTemplate.convertAndSend(exchangeName, "clienteSaldoInsuficiente", transformarClienteEmDto(pedido.getCliente()));
+            throw new ClienteInsufficientBalanceException("Saldo Insuficiente", HttpStatus.BAD_REQUEST, "BAD REQUEST");
+        }
+
         pedido.setValorTotal(pedido.calcularValorTotal());
+
+
 
         pedidoRepository.save(pedido);
         itemPedidoRepository.saveAll(itemPedidos);

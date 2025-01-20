@@ -29,4 +29,9 @@ public class ClienteListener {
         clienteService.enviarEmailClientePedidoCriado(clienteDto);
     }
 
+    @RabbitListener(queues = "${rabbitmq.queueSaldoInsuficiente.name}")
+    public void enviarNotificacaoClientePedidoSaldoInsuficiente(ClienteDto clienteDto){
+        clienteService.enviarEmailClientePedidoSaldoInsuficiente(clienteDto);
+    }
+
 }

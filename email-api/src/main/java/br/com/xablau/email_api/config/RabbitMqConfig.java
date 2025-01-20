@@ -32,6 +32,9 @@ public class RabbitMqConfig {
     @Value("${rabbitmq.queuePedidoCriado.name}")
     private String queuePedidoCriado;
 
+    @Value("${rabbitmq.queueSaldoInsuficiente.name}")
+    private String queueSaldoInsuficiente;
+
     @Bean
     public DirectExchange directExchange(){
         return new DirectExchange(exchangeName);
@@ -52,6 +55,10 @@ public class RabbitMqConfig {
         return new Queue(queuePedidoCriado);
     }
 
+    @Bean public Queue saldoInsuficiente(){
+        return new Queue(queueSaldoInsuficiente);
+    }
+
     @Bean
     public MessageConverter messageConverter() {
         return new Jackson2JsonMessageConverter();
@@ -70,6 +77,11 @@ public class RabbitMqConfig {
     @Bean
     public Binding bindingPedidoCriado(){
         return BindingBuilder.bind(clientePedidoCriado()).to(directExchange()).with("pedidoCriadoSucesso");
+    }
+
+    @Bean
+    public Binding bindingSaldoInsuficiente(){
+        return BindingBuilder.bind(saldoInsuficiente()).to(directExchange()).with("clienteSaldoInsuficiente");
     }
 
     @Bean
