@@ -29,4 +29,8 @@ public class Cliente{
     @JsonIgnore
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
     private List<Pedido> pedidoList = new ArrayList<>();
+
+    public void subtrairSaldo(Double valor){
+        saldoAplicativo -= valor;
+    }
 }

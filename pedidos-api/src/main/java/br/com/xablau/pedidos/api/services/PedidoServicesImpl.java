@@ -93,8 +93,7 @@ public class PedidoServicesImpl implements PedidoServices {
 
         pedido.setValorTotal(pedido.calcularValorTotal());
 
-
-
+        pedido.getCliente().subtrairSaldo(pedido.getValorTotal());
         pedidoRepository.save(pedido);
         itemPedidoRepository.saveAll(itemPedidos);
         rabbitTemplate.convertAndSend(exchangeName, "pedidoCriadoSucesso", transformarClienteEmDto(pedido.getCliente()));
