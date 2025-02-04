@@ -1,6 +1,6 @@
 package br.com.xablau.pedidos.api.controller;
 
-import br.com.xablau.dtos.ProdutoDto;
+import br.com.xablau.pedidos.api.entity.dtos.ProdutoDto;
 import br.com.xablau.pedidos.api.entity.Produto;
 import br.com.xablau.pedidos.api.services.impl.ProdutoServices;
 import org.springframework.http.HttpStatus;

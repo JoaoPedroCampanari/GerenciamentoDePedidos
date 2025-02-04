@@ -1,6 +1,6 @@
 package br.com.xablau.pedidos.api.services;
 
-import br.com.xablau.dtos.ClienteDto;
+import br.com.xablau.pedidos.api.entity.dtos.ClienteDto;
 import br.com.xablau.pedidos.api.entity.Cliente;
 import br.com.xablau.pedidos.api.entity.Pedido;
 import br.com.xablau.pedidos.api.exception.clienteException.ClienteEmailAlreadyExist;
@@ -60,7 +60,7 @@ public class ClienteServicesImpl implements ClienteServices {
 
     @Override
     public Cliente save(ClienteDto clienteDto) {
-        if (clienteRepository.existsByEmail(clienteDto.getEmail())){
+        if (clienteRepository.existsByEmail(clienteDto.email())){
             rabbitTemplate.convertAndSend(exchangeName, "servicesBDEmailErro", clienteDto);
             throw new ClienteEmailAlreadyExist("Email já possui cadastro", HttpStatus.CONFLICT, "CONFLICT");
         }

@@ -1,12 +1,10 @@
 package br.com.xablau.pedidos.api.services;
 
-import br.com.xablau.dtos.ItemPedidoDto;
+import br.com.xablau.pedidos.api.entity.dtos.ItemPedidoDto;
 import br.com.xablau.pedidos.api.entity.ItemPedido;
 import br.com.xablau.pedidos.api.entity.Pedido;
 import br.com.xablau.pedidos.api.exception.itemPedidoException.ItemPedidoNotFoundException;
-import br.com.xablau.pedidos.api.exception.produtoException.ProdutoNotFoundException;
 import br.com.xablau.pedidos.api.repository.ItemPedidoRepository;
-import br.com.xablau.pedidos.api.repository.PedidoRepository;
 import br.com.xablau.pedidos.api.repository.ProdutoRepository;
 import br.com.xablau.pedidos.api.services.impl.ItemPedidoServices;
 import org.springframework.beans.BeanUtils;

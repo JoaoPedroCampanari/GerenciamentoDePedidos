@@ -1,8 +1,8 @@
 package br.com.xablau.pedidos.api.services;
 
-import br.com.xablau.dtos.ClienteDto;
-import br.com.xablau.dtos.ItemPedidoDto;
-import br.com.xablau.dtos.PedidoDto;
+import br.com.xablau.pedidos.api.entity.dtos.ClienteDto;
+import br.com.xablau.pedidos.api.entity.dtos.ItemPedidoDto;
+import br.com.xablau.pedidos.api.entity.dtos.PedidoDto;
 import br.com.xablau.pedidos.api.entity.Cliente;
 import br.com.xablau.pedidos.api.entity.ItemPedido;
 import br.com.xablau.pedidos.api.entity.Pedido;
@@ -128,8 +128,6 @@ public class PedidoServicesImpl implements PedidoServices {
     }
 
     public ClienteDto transformarClienteEmDto(Cliente cliente){
-        ClienteDto clienteDto = new ClienteDto();
-        BeanUtils.copyProperties(cliente, clienteDto);
-        return clienteDto;
+        return new ClienteDto(cliente);
     }
 }

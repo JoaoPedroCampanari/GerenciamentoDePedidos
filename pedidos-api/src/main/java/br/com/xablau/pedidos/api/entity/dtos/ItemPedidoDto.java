@@ -1,4 +1,4 @@
-package br.com.xablau.dtos;
+package br.com.xablau.pedidos.api.entity.dtos;
 
 import java.util.Objects;
 import java.util.UUID;

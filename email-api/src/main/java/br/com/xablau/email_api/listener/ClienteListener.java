@@ -1,6 +1,7 @@
 package br.com.xablau.email_api.listener;
 
-import br.com.xablau.dtos.ClienteDto;
+
+import br.com.xablau.email_api.entity.ClienteDto;
 import br.com.xablau.email_api.serviceEmail.ClienteService;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;

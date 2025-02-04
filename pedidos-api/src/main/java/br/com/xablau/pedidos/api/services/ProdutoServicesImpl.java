@@ -1,6 +1,6 @@
 package br.com.xablau.pedidos.api.services;
 
-import br.com.xablau.dtos.ProdutoDto;
+import br.com.xablau.pedidos.api.entity.dtos.ProdutoDto;
 import br.com.xablau.pedidos.api.entity.Produto;
 import br.com.xablau.pedidos.api.exception.produtoException.ProdutoNotFoundException;
 import br.com.xablau.pedidos.api.repository.ProdutoRepository;
