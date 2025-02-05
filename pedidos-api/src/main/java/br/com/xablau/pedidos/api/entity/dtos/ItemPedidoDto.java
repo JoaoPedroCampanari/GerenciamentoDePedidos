@@ -1,54 +1,16 @@
 package br.com.xablau.pedidos.api.entity.dtos;
 
-import java.util.Objects;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+
 import java.util.UUID;
 
-public class ItemPedidoDto {
+public record ItemPedidoDto (
+        @NotNull(message = "Product ID cannot be null")
+        UUID productId,
+        @NotNull(message = "Quantity cannot be null")
+        @Min(value = 1, message = "The minimum quantity must be 1")
+        Integer quantidade) {
 
-    private UUID productId;
-    private Integer quantidade;
 
-    public ItemPedidoDto() {
-    }
-
-    public ItemPedidoDto(UUID productId, Integer quantidade) {
-        this.productId = productId;
-        this.quantidade = quantidade;
-    }
-
-    public UUID getProductId() {
-        return productId;
-    }
-
-    public void setProductId(UUID productId) {
-        this.productId = productId;
-    }
-
-    public Integer getQuantidade() {
-        return quantidade;
-    }
-
-    public void setQuantidade(Integer quantidade) {
-        this.quantidade = quantidade;
-    }
-
-    @Override
-    public String toString() {
-        return "ItemPedidoDto{" +
-                "productId=" + productId +
-                ", quantidade=" + quantidade +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        ItemPedidoDto that = (ItemPedidoDto) o;
-        return Objects.equals(productId, that.productId) && Objects.equals(quantidade, that.quantidade);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(productId, quantidade);
-    }
 }

@@ -78,7 +78,7 @@ public class PedidoServicesImpl implements PedidoServices {
     public Pedido save(PedidoDto pedidoDto) {
         Pedido pedido = converDtoParaPedido(pedidoDto);
 
-        List<ItemPedido> itemPedidos = pedidoDto.getItemPedidoDtos().stream().map(this::converterDtoParaItemPedido).toList();
+        List<ItemPedido> itemPedidos = pedidoDto.itemPedidoDtos().stream().map(this::converterDtoParaItemPedido).toList();
 
         for (ItemPedido itens: itemPedidos){
             itens.setPedido(pedido);
@@ -114,7 +114,8 @@ public class PedidoServicesImpl implements PedidoServices {
     public ItemPedido converterDtoParaItemPedido(ItemPedidoDto itemPedidoDto) {
         ItemPedido itemPedido = new ItemPedido();
         BeanUtils.copyProperties(itemPedidoDto, itemPedido);
-        itemPedido.setProduto(produtoRepository.findById(itemPedidoDto.getProductId()).orElseThrow(() -> new ProdutoNotFoundException("Produto não encontrado!", HttpStatus.NOT_FOUND, "NOT FOUND")));
+        itemPedido.setProduto(produtoRepository.findById(itemPedidoDto.productId())
+                .orElseThrow(() -> new ProdutoNotFoundException("Produto não encontrado!", HttpStatus.NOT_FOUND, "NOT FOUND")));
         return itemPedido;
     }
 
@@ -122,7 +123,7 @@ public class PedidoServicesImpl implements PedidoServices {
     public Pedido converDtoParaPedido(PedidoDto pedidoDto) {
         Pedido pedido = new Pedido();
         BeanUtils.copyProperties(pedidoDto, pedido);
-        pedido.setCliente(clienteRepository.findById(pedidoDto.getClientId())
+        pedido.setCliente(clienteRepository.findById(pedidoDto.clientId())
                 .orElseThrow(() -> new ClienteNotFoundException("Cliente inexistente", HttpStatus.NOT_FOUND, "NOT FOUND")));
         return pedido;
     }

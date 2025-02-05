@@ -16,11 +16,9 @@ import java.util.UUID;
 public class ItemPedidoServicesImpl implements ItemPedidoServices {
 
     private final ItemPedidoRepository itemPedidoRepository;
-    private final ProdutoRepository produtoRepository;
 
     public ItemPedidoServicesImpl(ItemPedidoRepository itemPedidoRepository, ProdutoRepository produtoRepository) {
         this.itemPedidoRepository = itemPedidoRepository;
-        this.produtoRepository = produtoRepository;
     }
 
     @Override
