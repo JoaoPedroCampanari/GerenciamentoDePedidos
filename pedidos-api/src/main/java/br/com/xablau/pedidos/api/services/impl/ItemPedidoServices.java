@@ -20,5 +20,7 @@ public interface ItemPedidoServices {
 
     ItemPedido save(ItemPedido itemPedido);
 
+    List<ItemPedido> saveAll(List<ItemPedido> itemPedidos);
+
     Pedido pedidoDoItemById(UUID id);
 }

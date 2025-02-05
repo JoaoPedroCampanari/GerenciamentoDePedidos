@@ -14,7 +14,10 @@ import br.com.xablau.pedidos.api.repository.ClienteRepository;
 import br.com.xablau.pedidos.api.repository.ItemPedidoRepository;
 import br.com.xablau.pedidos.api.repository.PedidoRepository;
 import br.com.xablau.pedidos.api.repository.ProdutoRepository;
+import br.com.xablau.pedidos.api.services.impl.ClienteServices;
+import br.com.xablau.pedidos.api.services.impl.ItemPedidoServices;
 import br.com.xablau.pedidos.api.services.impl.PedidoServices;
+import br.com.xablau.pedidos.api.services.impl.ProdutoServices;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,16 +36,16 @@ public class PedidoServicesImpl implements PedidoServices {
 
     private final RabbitTemplate rabbitTemplate;
     private final PedidoRepository pedidoRepository;
-    private final ItemPedidoRepository itemPedidoRepository;
-    private final ClienteRepository clienteRepository;
-    private final ProdutoRepository produtoRepository;
+    private final ItemPedidoServices itemPedidoServices;
+    private final ClienteServices clienteServices;
+    private final ProdutoServices produtoServices;
 
-    public PedidoServicesImpl(RabbitTemplate rabbitTemplate, PedidoRepository pedidoRepository, ItemPedidoRepository itemPedidoRepository, ClienteRepository clienteRepository, ProdutoRepository produtoRepository) {
+    public PedidoServicesImpl(RabbitTemplate rabbitTemplate, PedidoRepository pedidoRepository, ItemPedidoServices itemPedidoServices, ClienteServices clienteServices, ProdutoServices produtoServices) {
         this.rabbitTemplate = rabbitTemplate;
         this.pedidoRepository = pedidoRepository;
-        this.itemPedidoRepository = itemPedidoRepository;
-        this.clienteRepository = clienteRepository;
-        this.produtoRepository = produtoRepository;
+        this.itemPedidoServices = itemPedidoServices;
+        this.clienteServices = clienteServices;
+        this.produtoServices = produtoServices;
     }
 
     @Override
@@ -95,7 +98,7 @@ public class PedidoServicesImpl implements PedidoServices {
 
         pedido.getCliente().subtrairSaldo(pedido.getValorTotal());
         pedidoRepository.save(pedido);
-        itemPedidoRepository.saveAll(itemPedidos);
+        itemPedidoServices.saveAll(itemPedidos);
         rabbitTemplate.convertAndSend(exchangeName, "pedidoCriadoSucesso", transformarClienteEmDto(pedido.getCliente()));
 
         return pedido;
@@ -114,8 +117,7 @@ public class PedidoServicesImpl implements PedidoServices {
     public ItemPedido converterDtoParaItemPedido(ItemPedidoDto itemPedidoDto) {
         ItemPedido itemPedido = new ItemPedido();
         BeanUtils.copyProperties(itemPedidoDto, itemPedido);
-        itemPedido.setProduto(produtoRepository.findById(itemPedidoDto.productId())
-                .orElseThrow(() -> new ProdutoNotFoundException("Produto não encontrado!", HttpStatus.NOT_FOUND, "NOT FOUND")));
+        itemPedido.setProduto(produtoServices.findById(itemPedidoDto.productId()));
         return itemPedido;
     }
 
@@ -123,8 +125,7 @@ public class PedidoServicesImpl implements PedidoServices {
     public Pedido converDtoParaPedido(PedidoDto pedidoDto) {
         Pedido pedido = new Pedido();
         BeanUtils.copyProperties(pedidoDto, pedido);
-        pedido.setCliente(clienteRepository.findById(pedidoDto.clientId())
-                .orElseThrow(() -> new ClienteNotFoundException("Cliente inexistente", HttpStatus.NOT_FOUND, "NOT FOUND")));
+        pedido.setCliente(clienteServices.findById(pedidoDto.clientId()));
         return pedido;
     }
 

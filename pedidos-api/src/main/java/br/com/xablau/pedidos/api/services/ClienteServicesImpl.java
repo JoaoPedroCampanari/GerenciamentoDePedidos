@@ -78,10 +78,4 @@ public class ClienteServicesImpl implements ClienteServices {
         return cliente.getPedidoList();
     }
 
-    @Override
-    public void enfileirarCliente(ClienteDto clienteDto) {
-        rabbitTemplate.convertAndSend(exchangeName,"servicesBD", clienteDto);
-    }
-
-
 }

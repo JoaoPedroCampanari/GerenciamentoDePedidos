@@ -45,7 +45,7 @@ public class ClienteService {
 
     public void enviarEmailClientePedidoSaldoInsuficiente(ClienteDto clienteDto) {
         String mensagem = gerarMensagemPedidoSaldoInsuficiente(clienteDto);
-        enviarEmail(clienteDto.email(), mensagem, "Cliente cadastrado");
+        enviarEmail(clienteDto.email(), mensagem, "Saldo insuficiente");
     }
 
     public String gerarMensagemClienteCriado(ClienteDto clienteDto){
@@ -66,7 +66,7 @@ public class ClienteService {
 
     public String gerarMensagemPedidoSaldoInsuficiente(ClienteDto clienteDto){
         return String.format("Carrísimo cliente %s, " +
-                "infelizmente seu saldo %.2f é insuficiente para continuar com o pedido", clienteDto.nome(), clienteDto.saldoAplicativo());
+                "infelizmente seu saldo R$ %.2f é insuficiente para continuar com o pedido", clienteDto.nome(), clienteDto.saldoAplicativo());
     }
 
 

@@ -22,6 +22,4 @@ public interface ClienteServices {
     Cliente save(ClienteDto clienteDto);
 
     List<Pedido> pedidosClienteById(UUID id);
-
-    void enfileirarCliente(ClienteDto clienteDto);
 }

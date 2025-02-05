@@ -38,7 +38,7 @@ public class ClienteController {
 
     @PostMapping
     ResponseEntity<String> save(@RequestBody @Valid ClienteDto clienteDto){
-        clienteServices.enfileirarCliente(clienteDto);
+        clienteServices.save(clienteDto);
         return ResponseEntity.status(HttpStatus.CREATED).body("Um email com mais detalhes sobre o cadastrado sera enviado");
     }
 

@@ -13,8 +13,6 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.HashMap;
-import java.util.Map;
 
 @Configuration
 public class RabbitMqConfig {
@@ -22,45 +20,11 @@ public class RabbitMqConfig {
     @Value("${rabbitmq.direct.exchange.name}")
     private String exchangeDirectName;
 
-    @Value("${rabbitmq.queue.name}")
-    private String queueProcessamentoServicesName;
-
-    @Value("${rabbitmq.exchange.dlx.name}")
-    private String exchangeDlxName;
-
-    @Value("${rabbitmq.queue.dlq.name}")
-    private String queueDlqName;
-
-    @Bean
-    public FanoutExchange pedidosDlxExchange() {
-        return new FanoutExchange(exchangeDlxName);
-    }
-
     @Bean
     public DirectExchange pedidosExchangeDirect(){
         return new DirectExchange(exchangeDirectName);
     }
 
-    @Bean
-    public Queue queueProcessamentoServices(){
-        Map<String, Object> argumentos = new HashMap<>();
-        argumentos.put("x-dead-letter-exchange", exchangeDlxName);
-        return new Queue(queueProcessamentoServicesName, true, false, false, argumentos);
-    }
-
-    @Bean
-    public Queue notificacaoDlqQueue() {
-        return new Queue(queueDlqName);
-    }
-    @Bean
-    public Binding bindingDlxDlq(){
-        return BindingBuilder.bind(notificacaoDlqQueue()).to(pedidosDlxExchange());
-    }
-
-    @Bean
-    public Binding binding(){
-        return BindingBuilder.bind(queueProcessamentoServices()).to(pedidosExchangeDirect()).with("servicesBD");
-    }
 
     @Bean
     public RabbitAdmin rabbitAdmin(ConnectionFactory connectionFactory) {
