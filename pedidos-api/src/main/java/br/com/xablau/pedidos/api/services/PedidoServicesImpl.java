@@ -1,19 +1,14 @@
 package br.com.xablau.pedidos.api.services;
 
-import br.com.xablau.pedidos.api.entity.dtos.ClienteDto;
-import br.com.xablau.pedidos.api.entity.dtos.ItemPedidoDto;
-import br.com.xablau.pedidos.api.entity.dtos.PedidoDto;
 import br.com.xablau.pedidos.api.entity.Cliente;
 import br.com.xablau.pedidos.api.entity.ItemPedido;
 import br.com.xablau.pedidos.api.entity.Pedido;
+import br.com.xablau.pedidos.api.entity.dtos.ClienteDto;
+import br.com.xablau.pedidos.api.entity.dtos.ItemPedidoDto;
+import br.com.xablau.pedidos.api.entity.dtos.PedidoDto;
 import br.com.xablau.pedidos.api.exception.clienteException.ClienteInsufficientBalanceException;
-import br.com.xablau.pedidos.api.exception.clienteException.ClienteNotFoundException;
 import br.com.xablau.pedidos.api.exception.pedidoException.PedidoNotFoundException;
-import br.com.xablau.pedidos.api.exception.produtoException.ProdutoNotFoundException;
-import br.com.xablau.pedidos.api.repository.ClienteRepository;
-import br.com.xablau.pedidos.api.repository.ItemPedidoRepository;
 import br.com.xablau.pedidos.api.repository.PedidoRepository;
-import br.com.xablau.pedidos.api.repository.ProdutoRepository;
 import br.com.xablau.pedidos.api.services.impl.ClienteServices;
 import br.com.xablau.pedidos.api.services.impl.ItemPedidoServices;
 import br.com.xablau.pedidos.api.services.impl.PedidoServices;
@@ -23,7 +18,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
 
 import java.util.List;
 import java.util.UUID;
